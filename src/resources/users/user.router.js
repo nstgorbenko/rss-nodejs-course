@@ -45,7 +45,7 @@ router.route('/:id').put(async (req, res) => {
     const updatedUser = await usersService.update(req.params.id, req.body);
     const rawUser = User.toResponse(updatedUser);
 
-    res.status(200).send(User.toResponse(rawUser));
+    res.status(200).send(rawUser);
   } catch (err) {
     res.status(400).send('Bad request');
   }

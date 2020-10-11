@@ -1,8 +1,9 @@
 const users = require('./users');
+const boards = require('./boards');
 
 const dataBase = {
   users,
-  boards: [],
+  boards,
   tasks: []
 };
 
