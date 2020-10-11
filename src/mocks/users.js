@@ -2,6 +2,7 @@ const User = require('../resources/users/user.model');
 
 const mockUsers = [
   new User({
+    id: 'user-1',
     name: 'John',
     login: 'johnny',
     password: 'johnny111'

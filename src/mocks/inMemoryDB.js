@@ -1,10 +1,11 @@
 const users = require('./users');
 const boards = require('./boards');
+const tasks = require('./tasks');
 
 const dataBase = {
   users,
   boards,
-  tasks: []
+  tasks
 };
 
 const getAll = nameSpace => dataBase[nameSpace];

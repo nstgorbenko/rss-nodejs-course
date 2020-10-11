@@ -4,6 +4,7 @@ const swaggerUI = require('swagger-ui-express');
 const YAML = require('yamljs');
 
 const boardRouter = require('./resources/boards/board.router');
+const taskRouter = require('./resources/tasks/task.router');
 const userRouter = require('./resources/users/user.router');
 
 const app = express();
@@ -24,5 +25,7 @@ app.use('/', (req, res, next) => {
 app.use('/users', userRouter);
 
 app.use('/boards', boardRouter);
+
+boardRouter.use('/:boardId/tasks', taskRouter);
 
 module.exports = app;
