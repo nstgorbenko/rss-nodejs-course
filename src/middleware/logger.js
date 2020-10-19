@@ -18,6 +18,7 @@ const logger = createLogger({
       colorize: true
     })
   ],
+
   exitOnError: false
 });
 
@@ -32,4 +33,11 @@ const requestLogger = (req, res, next) => {
   next();
 };
 
-module.exports = { logger, requestLogger };
+const errorLogger = (err, req, res, next) => {
+  const { statusCode, message } = err;
+
+  logger.error(`${statusCode} ${message}`);
+  next(err);
+};
+
+module.exports = { logger, requestLogger, errorLogger };

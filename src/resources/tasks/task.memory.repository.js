@@ -1,5 +1,6 @@
 const DB = require('../../mocks/inMemoryDB');
 const Task = require('./task.model');
+const { NotFoundError } = require('../../helpers/error');
 
 const NAME_SPACE = 'tasks';
 
@@ -10,7 +11,7 @@ const get = async id => {
   const task = await DB.get(NAME_SPACE, id);
 
   if (!task) {
-    throw new Error('Task not found');
+    throw new NotFoundError('Task not found');
   }
 
   return task;
@@ -18,14 +19,20 @@ const get = async id => {
 
 const create = async (boardId, newData) => {
   const newTask = new Task(Object.assign({}, newData, { boardId }));
-  return await DB.create(NAME_SPACE, newTask);
+  const createdTask = await DB.create(NAME_SPACE, newTask);
+
+  if (!createdTask) {
+    throw new NotFoundError('Bad request');
+  }
+
+  return createdTask;
 };
 
 const remove = async id => {
   const isRemoved = await DB.remove(NAME_SPACE, id);
 
   if (!isRemoved) {
-    throw new Error('Task not found');
+    throw new NotFoundError('Task not found');
   }
 };
 
@@ -55,7 +62,7 @@ const update = async (id, newData) => {
   const updatedTask = await DB.update(NAME_SPACE, id, new Task(newTask));
 
   if (updatedTask === false) {
-    throw new Error('Task not found');
+    throw new NotFoundError('Bad request');
   }
 
   return updatedTask;

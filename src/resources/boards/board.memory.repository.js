@@ -1,5 +1,6 @@
 const DB = require('../../mocks/inMemoryDB');
 const Board = require('./board.model');
+const { NotFoundError } = require('../../helpers/error');
 
 const NAME_SPACE = 'boards';
 
@@ -9,7 +10,7 @@ const get = async id => {
   const board = await DB.get(NAME_SPACE, id);
 
   if (!board) {
-    throw new Error('Board not found');
+    throw new NotFoundError('Board not found');
   }
 
   return board;
@@ -17,14 +18,20 @@ const get = async id => {
 
 const create = async newData => {
   const newBoard = new Board(newData);
-  return await DB.create(NAME_SPACE, newBoard);
+  const createdBoard = await DB.create(NAME_SPACE, newBoard);
+
+  if (!createdBoard) {
+    throw new NotFoundError('Bad request');
+  }
+
+  return createdBoard;
 };
 
 const remove = async id => {
   const isRemoved = await DB.remove(NAME_SPACE, id);
 
   if (!isRemoved) {
-    throw new Error('Board not found');
+    throw new NotFoundError('Board not found');
   }
 };
 
@@ -34,7 +41,7 @@ const update = async (id, newData) => {
   const updatedBoard = await DB.update(NAME_SPACE, id, new Board(newBoard));
 
   if (updatedBoard === false) {
-    throw new Error('Board not found');
+    throw new NotFoundError('Board not found');
   }
 
   return updatedBoard;
