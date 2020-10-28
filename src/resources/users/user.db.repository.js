@@ -1,13 +1,12 @@
-const DB = require('../../mocks/inMemoryDB');
-const User = require('./user.model');
 const { NotFoundError } = require('../../helpers/error');
+const User = require('./user.model');
 
-const NAME_SPACE = 'users';
-
-const getAll = async () => await DB.getAll(NAME_SPACE);
+const getAll = async () => {
+  return User.find({});
+};
 
 const get = async id => {
-  const user = await DB.get(NAME_SPACE, id);
+  const user = await User.findOne({ _id: id });
 
   if (!user) {
     throw new NotFoundError('User not found');
@@ -17,8 +16,7 @@ const get = async id => {
 };
 
 const create = async newData => {
-  const newUser = new User(newData);
-  const createdUser = await DB.create(NAME_SPACE, newUser);
+  const createdUser = await User.create(newData);
 
   if (!createdUser) {
     throw new NotFoundError('Bad request');
@@ -28,7 +26,7 @@ const create = async newData => {
 };
 
 const remove = async id => {
-  const isRemoved = await DB.remove(NAME_SPACE, id);
+  const isRemoved = (await User.deleteOne({ _id: id })).deletedCount;
 
   if (!isRemoved) {
     throw new NotFoundError('User not found');
@@ -36,11 +34,10 @@ const remove = async id => {
 };
 
 const update = async (id, newData) => {
-  const oldUser = await DB.get(NAME_SPACE, id);
-  const newUser = Object.assign({}, oldUser, newData);
-  const updatedUser = await DB.update(NAME_SPACE, id, new User(newUser));
+  await User.updateOne({ _id: id }, newData);
+  const updatedUser = await get(id);
 
-  if (updatedUser === false) {
+  if (!updatedUser) {
     throw new NotFoundError('User not found');
   }
 
