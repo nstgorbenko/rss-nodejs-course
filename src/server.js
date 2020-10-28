@@ -15,7 +15,6 @@ db.on('error', () => logger.error('MongoDB connection error')).once(
   'open',
   () => {
     logger.info('Successfully connect to MongoDB');
-    // db.dropDatabase();
     app.listen(PORT, () =>
       logger.info(`App is running on http://localhost:${PORT}`)
     );
