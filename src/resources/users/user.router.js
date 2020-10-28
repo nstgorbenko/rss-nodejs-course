@@ -6,39 +6,35 @@ const executeAsync = require('../../helpers/asyncWrapper');
 router.route('/').get(
   executeAsync(async (req, res) => {
     const users = await usersService.getAll();
-    const rawUsers = users.map(User.toResponse);
-    res.status(200).send(rawUsers);
+    await res.status(200).send(users.map(User.toResponse));
   })
 );
 
 router.route('/:id').get(
   executeAsync(async (req, res) => {
     const user = await usersService.get(req.params.id);
-    const rawUser = User.toResponse(user);
-    res.status(200).send(rawUser);
+    await res.status(200).send(User.toResponse(user));
   })
 );
 
 router.route('/').post(
   executeAsync(async (req, res) => {
     const newUser = await usersService.create(req.body);
-    const rawUser = User.toResponse(newUser);
-    res.status(200).send(rawUser);
+    await res.status(200).send(User.toResponse(newUser));
   })
 );
 
 router.route('/:id').delete(
   executeAsync(async (req, res) => {
     await usersService.remove(req.params.id);
-    res.sendStatus(204);
+    await res.sendStatus(204);
   })
 );
 
 router.route('/:id').put(
   executeAsync(async (req, res) => {
     const updatedUser = await usersService.update(req.params.id, req.body);
-    const rawUser = User.toResponse(updatedUser);
-    res.status(200).send(rawUser);
+    await res.status(200).send(User.toResponse(updatedUser));
   })
 );
 
