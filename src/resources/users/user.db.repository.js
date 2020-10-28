@@ -1,9 +1,7 @@
 const { NotFoundError } = require('../../helpers/error');
 const User = require('./user.model');
 
-const getAll = async () => {
-  return User.find({});
-};
+const getAll = async () => User.find({});
 
 const get = async id => {
   const user = await User.findOne({ _id: id });

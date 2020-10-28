@@ -1,13 +1,10 @@
-const DB = require('../../mocks/inMemoryDB');
 const Board = require('./board.model');
 const { NotFoundError } = require('../../helpers/error');
 
-const NAME_SPACE = 'boards';
-
-const getAll = async () => await DB.getAll(NAME_SPACE);
+const getAll = async () => Board.find({});
 
 const get = async id => {
-  const board = await DB.get(NAME_SPACE, id);
+  const board = await Board.findById(id);
 
   if (!board) {
     throw new NotFoundError('Board not found');
@@ -17,8 +14,7 @@ const get = async id => {
 };
 
 const create = async newData => {
-  const newBoard = new Board(newData);
-  const createdBoard = await DB.create(NAME_SPACE, newBoard);
+  const createdBoard = await Board.create(newData);
 
   if (!createdBoard) {
     throw new NotFoundError('Bad request');
@@ -28,7 +24,7 @@ const create = async newData => {
 };
 
 const remove = async id => {
-  const isRemoved = await DB.remove(NAME_SPACE, id);
+  const isRemoved = (await Board.deleteOne({ _id: id })).deletedCount;
 
   if (!isRemoved) {
     throw new NotFoundError('Board not found');
@@ -36,11 +32,10 @@ const remove = async id => {
 };
 
 const update = async (id, newData) => {
-  const oldBoard = await DB.get(NAME_SPACE, id);
-  const newBoard = Object.assign({}, oldBoard, newData);
-  const updatedBoard = await DB.update(NAME_SPACE, id, new Board(newBoard));
+  await Board.updateOne({ _id: id }, newData);
+  const updatedBoard = await get(id);
 
-  if (updatedBoard === false) {
+  if (!updatedBoard) {
     throw new NotFoundError('Board not found');
   }
 
