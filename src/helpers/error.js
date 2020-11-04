@@ -6,4 +6,12 @@ class NotFoundError extends Error {
   }
 }
 
-module.exports = { NotFoundError };
+class UnauthorizedError extends Error {
+  constructor(message) {
+    super();
+    this.statusCode = 401;
+    this.message = message;
+  }
+}
+
+module.exports = { NotFoundError, UnauthorizedError };
