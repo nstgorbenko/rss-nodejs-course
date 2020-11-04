@@ -13,7 +13,6 @@ router.route('/').get(
 router.route('/:id').get(
   executeAsync(async (req, res) => {
     const user = await usersService.get(req.params.id);
-    console.log(user);
     await res.status(200).send(User.toResponse(user));
   })
 );

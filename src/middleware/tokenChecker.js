@@ -10,15 +10,17 @@ const tokenChecker = (req, res, next) => {
 
   const authHeader = req.header('Authorization');
   if (authHeader !== undefined) {
-    const tokenString = req.header('Authorization');
-
-    const [type, token] = tokenString.split(' ');
+    const [type, token] = authHeader.split(' ');
 
     if (type !== 'Bearer') {
       throw new UnauthorizedError('Unauthorized user');
     } else {
-      jwt.verify(token, JWT_SECRET_KEY);
-      return next();
+      try {
+        jwt.verify(token, JWT_SECRET_KEY);
+        return next();
+      } catch (err) {
+        throw new UnauthorizedError('Unauthorized user');
+      }
     }
   }
 

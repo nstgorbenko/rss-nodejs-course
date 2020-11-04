@@ -11,11 +11,11 @@ const getByProps = props => usersRepo.getByProps(props);
 const create = async newData => {
   const { password } = newData;
   const hashedPassword = await hashPassword(password);
-
-  usersRepo.create({
+  const createdUser = await usersRepo.create({
     ...newData,
     password: hashedPassword
   });
+  return createdUser;
 };
 
 const remove = async id => {

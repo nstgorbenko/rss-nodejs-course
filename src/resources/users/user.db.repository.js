@@ -1,4 +1,4 @@
-const { NotFoundError } = require('../../helpers/error');
+const { ForbiddenError, NotFoundError } = require('../../helpers/error');
 const User = require('./user.model');
 
 const getAll = async () => User.find({});
@@ -17,7 +17,7 @@ const getByProps = async props => {
   const user = await User.findOne(props);
 
   if (!user) {
-    throw new NotFoundError('User not found');
+    throw new ForbiddenError('Forbidden');
   }
 
   return user;

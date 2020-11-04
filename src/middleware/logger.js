@@ -36,7 +36,6 @@ const requestLogger = (req, res, next) => {
 const errorLogger = (err, req, res, next) => {
   const { statusCode, message } = err;
 
-  console.log(err);
   logger.error(
     `${statusCode || 500} ${statusCode ? message : 'Internal Server Error'}`
   );

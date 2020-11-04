@@ -5,15 +5,11 @@ const { checkPassword } = require('../../helpers/hasher');
 
 const getToken = async (login, password) => {
   const user = await getUserByAuthData({ login });
+  const { id, password: hashedPassword } = user;
 
-  const { password: hashedPassword } = user;
-  const isValidPassword = await checkPassword(password, hashedPassword);
-
-  if (isValidPassword) {
-    const { id } = user;
-    const token = jwt.sign({ id, login }, JWT_SECRET_KEY);
-    return token;
-  }
+  await checkPassword(password, hashedPassword);
+  const token = jwt.sign({ id, login }, JWT_SECRET_KEY);
+  return token;
 };
 
 module.exports = { getToken };
