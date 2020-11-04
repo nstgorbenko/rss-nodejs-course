@@ -1,0 +1,4 @@
+2020-11-04 12:40:50 +03:00: 	500 Uncaught Exception. Message: Router.use() requires a middleware function but got a Object
+2020-11-04 12:41:38 +03:00: 	500 Uncaught Exception. Message: Router.use() requires a middleware function but got a Object
+2020-11-04 12:43:29 +03:00: 	500 Uncaught Exception. Message: Router.use() requires a middleware function but got a Object
+2020-11-04 12:49:57 +03:00: 	404 User not found

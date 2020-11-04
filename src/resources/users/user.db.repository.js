@@ -13,6 +13,16 @@ const get = async id => {
   return user;
 };
 
+const getByProps = async props => {
+  const user = await User.findOne(props);
+
+  if (!user) {
+    throw new NotFoundError('User not found');
+  }
+
+  return user;
+};
+
 const create = async newData => {
   const createdUser = await User.create(newData);
 
@@ -42,4 +52,4 @@ const update = async (id, newData) => {
   return updatedUser;
 };
 
-module.exports = { getAll, get, create, remove, update };
+module.exports = { getAll, get, getByProps, create, remove, update };
