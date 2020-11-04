@@ -4,11 +4,13 @@ const swaggerUI = require('swagger-ui-express');
 const YAML = require('yamljs');
 
 const boardRouter = require('./resources/boards/board.router');
+const loginRouter = require('./resources/login/login.router');
 const taskRouter = require('./resources/tasks/task.router');
 const userRouter = require('./resources/users/user.router');
 
 const { requestLogger, errorLogger, logger } = require('./middleware/logger');
 const { errorHandler } = require('./middleware/errorHandler');
+const { tokenChecker } = require('./middleware/tokenChecker');
 
 process.on('uncaughtException', err => {
   logger.error(`500 Uncaught Exception. Message: ${err.message}`);
@@ -26,11 +28,10 @@ const app = express();
 const swaggerDocument = YAML.load(path.join(__dirname, '../doc/api.yaml'));
 
 app.use(express.json());
-
 app.use(requestLogger);
+app.use(tokenChecker);
 
 app.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
-
 app.use('/', (req, res, next) => {
   if (req.originalUrl === '/') {
     res.send('Service is running!');
@@ -38,11 +39,9 @@ app.use('/', (req, res, next) => {
   }
   next();
 });
-
+app.use('/login', loginRouter);
 app.use('/users', userRouter);
-
 app.use('/boards', boardRouter);
-
 boardRouter.use('/:boardId/tasks', taskRouter);
 
 app.use(errorLogger);

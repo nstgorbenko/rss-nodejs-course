@@ -1,4 +1,4 @@
-const { NotFoundError } = require('../../helpers/error');
+const { ForbiddenError, NotFoundError } = require('../../helpers/error');
 const User = require('./user.model');
 
 const getAll = async () => User.find({});
@@ -8,6 +8,16 @@ const get = async id => {
 
   if (!user) {
     throw new NotFoundError('User not found');
+  }
+
+  return user;
+};
+
+const getByProps = async props => {
+  const user = await User.findOne(props);
+
+  if (!user) {
+    throw new ForbiddenError('Forbidden');
   }
 
   return user;
@@ -42,4 +52,4 @@ const update = async (id, newData) => {
   return updatedUser;
 };
 
-module.exports = { getAll, get, create, remove, update };
+module.exports = { getAll, get, getByProps, create, remove, update };
